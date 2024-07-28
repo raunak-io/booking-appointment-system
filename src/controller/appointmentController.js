@@ -49,7 +49,7 @@ const availableSlots = (dateSlots, allocatedSlots, timezone) => {
       unavailableSlots.add(clonedTime.format());
     }
   });
- 
+
   const availableSlots = dateSlots.filter(
     (slot) => !unavailableSlots.has(slot),
   );
@@ -72,7 +72,6 @@ exports.createEvent = async (req, res, next) => {
     const eventEnd = moment
       .tz(dateTime, defaultTimezone)
       .add(duration, 'minutes');
-    console.log('eventStart --', eventStart);
 
     if (
       eventStart.hour() < startHour ||
@@ -89,11 +88,6 @@ exports.createEvent = async (req, res, next) => {
       .where('eventDate', '==', eventStart.format('YYYY-MM-DD'))
       .get();
     const events = eventsSnapshot.docs.map((doc) => doc.data());
-    console.log(
-      'events list --',
-      events,
-      isOverlapping(eventStart, eventEnd, events),
-    );
 
     if (isOverlapping(eventStart, eventEnd, events)) {
       return res.status(422).json({
@@ -123,22 +117,16 @@ exports.getFreeSlots = async (req, res, next) => {
       .collection('events')
       .where('eventDate', '==', date)
       .get();
-    console.log('timezone here ---', timezone, defaultTimezone);
 
     const bookedSlots = eventsSnapshot.docs.map((doc) => {
-      console.log('doc.data().dateTime --', doc.data().dateTime);
       let slotDate = doc.data().dateTime;
       if (timezone != defaultTimezone) {
         const timeInOriginalTimezone = moment.tz(slotDate, defaultTimezone);
-        console.log('timeInOriginalTimezone --');
 
-        
         const timeInTargetTimezone = timeInOriginalTimezone
           .clone()
           .tz(timezone);
-        console.log('timeInTargetTimezone --', timeInTargetTimezone);
 
-    
         slotDate = timeInTargetTimezone.format();
       }
       return {
@@ -146,7 +134,6 @@ exports.getFreeSlots = async (req, res, next) => {
         duration: doc.data().duration,
       };
     });
-    console.log('bookedSlots beforehand after ,mod --', bookedSlots);
 
     const freeSlots = availableSlots(slots, bookedSlots, timezone);
 
@@ -159,7 +146,6 @@ exports.getFreeSlots = async (req, res, next) => {
 exports.getEvents = async (req, res, next) => {
   try {
     const { startDate, endDate } = req.query;
-    console.log('startDate --', startDate, 'end date --', endDate);
 
     const start = moment.tz(startDate, defaultTimezone).format(),
       end = moment.tz(endDate, defaultTimezone).format();
