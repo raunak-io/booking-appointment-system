@@ -16,7 +16,7 @@ console.log(app.get('env'));
 const port = process.env.PORT || 3000;
 const host = process.env.HOST ||'0.0.0.0';
 const server = app.listen(port,host, () => {
-  console.log(`server is lstening on port : ${port} `);
+  console.log(`server is listening on port : ${port} `);
 });
 
 process.on('uncaught rejection', err => {
