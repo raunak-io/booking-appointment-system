@@ -1,7 +1,7 @@
 const db = require('../configuration/firebase/firebase');
 const moment = require('moment-timezone');
 
-const startHour = 10; // 10 AM
+const startHour = 8; // 10 AM
 const endHour = 17; // 5 PM
 const slotDuration = 30; // 30 minutes
 const defaultTimezone = 'US/Eastern';
@@ -54,7 +54,7 @@ const availableSlots = (dateSlots, allocatedSlots, timezone) => {
     (slot) => !unavailableSlots.has(slot),
   );
 
-  return availableSlots;
+  return availableSlots.map(slot=> moment.tz(slot, timezone).format('YYYY-MM-DDTHH:mm:ss'))
 };
 
 const isOverlapping = (startTime, endTime, events) => {
