@@ -1,5 +1,9 @@
-please use this below configuration in 
+to run the server with nodemon please use npm run dev 
+to run without nodemon use npm run start
+
+please use this below firebase configuration in 
 src/configuration/firebase/serviceAccountKey.json
+to connect to firebase db
 
 {
   "type": "service_account",

@@ -54,7 +54,9 @@ const availableSlots = (dateSlots, allocatedSlots, timezone) => {
     (slot) => !unavailableSlots.has(slot),
   );
 
-  return availableSlots.map(slot=> moment.tz(slot, timezone).format('YYYY-MM-DDTHH:mm:ss'))
+  return availableSlots.map((slot) =>
+    moment.tz(slot, timezone).format('YYYY-MM-DDTHH:mm:ss'),
+  );
 };
 
 const isOverlapping = (startTime, endTime, events) => {
@@ -145,7 +147,7 @@ exports.getFreeSlots = async (req, res, next) => {
 
 exports.getEvents = async (req, res, next) => {
   try {
-    const { startDate, endDate } = req.query;
+    const { startDate = new Date(), endDate = new Date() } = req.query;
 
     const start = moment.tz(startDate, defaultTimezone).format(),
       end = moment.tz(endDate, defaultTimezone).format();

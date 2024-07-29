@@ -15,9 +15,9 @@ const globalErrorHandler = require('./controller/errorController');
 
 const app = express();
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit:'10kb'}));
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ limit:'10kb', extended: true }));
 app.use(helmet());
 app.use(cors());
 app.options('*', cors());
@@ -30,7 +30,6 @@ const limiter = rateLimit({
 });
 
 app.use('/api', limiter);
-app.use(express.json({ limit: '10kb' }));
 app.use(cookieParser());
 app.use(xss());
 app.use(compression());
